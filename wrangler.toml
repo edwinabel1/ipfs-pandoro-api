@@ -111,3 +111,12 @@ enabled = true
 # [[vectorize]]
 # binding = "MY_INDEX"
 # index_name = "my-index"
+
+[[durable_objects.bindings]]
+name = "NODE_STATUS"
+class_name = "NodeStatus"
+
+[[migrations]]
+tag = "v1" # Should be unique for each entry
+new_classes = ["NodeStatus"]
+

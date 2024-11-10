@@ -1,9 +1,13 @@
-import { Hono } from 'hono'
+import { Hono } from 'hono';
+import { nodeRouter } from './routes/node';
+import { NodeStatus } from './objects/NodeStatus'; // 引入 NodeStatus Durable Object
 
-const app = new Hono<{ Bindings: CloudflareBindings }>()
+const app = new Hono<{ Bindings: CloudflareBindings }>();
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+// 路由
+app.route('/node', nodeRouter);
 
-export default app
+// 导出 NodeStatus Durable Object 类
+export { NodeStatus };
+
+export default app;
