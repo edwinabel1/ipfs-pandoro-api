@@ -55,7 +55,7 @@ nodeRouter.get('/status', async (c) => {
 });
 
 // 添加删除节点的 `DELETE` 路由
-nodeRouter.delete('/node/:nodeId', async (c) => {
+nodeRouter.delete('/:nodeId', async (c) => {
   const nodeId = c.req.param('nodeId');
 
   if (!nodeId) {
