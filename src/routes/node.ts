@@ -53,3 +53,25 @@ nodeRouter.get('/status', async (c) => {
     return c.text('Status not found', 404);
   }
 });
+
+// 添加删除节点的 `DELETE` 路由
+nodeRouter.delete('/node/:nodeId', async (c) => {
+  const nodeId = c.req.param('nodeId');
+
+  if (!nodeId) {
+    return c.text('Node ID not specified', 400);
+  }
+
+  const id = c.env.NODE_STATUS.idFromName('global-node-status');
+  const durableObject = c.env.NODE_STATUS.get(id);
+
+  // 向 Durable Object 发起 `DELETE` 请求删除节点状态
+  const durableObjectUrl = new URL(`/node/${nodeId}`, c.req.url).toString();
+  const response = await durableObject.fetch(durableObjectUrl, { method: 'DELETE' });
+
+  if (response.status === 200) {
+    return c.text(`Node ${nodeId} deleted successfully`, 200);
+  } else {
+    return c.text('Failed to delete node', 500);
+  }
+});

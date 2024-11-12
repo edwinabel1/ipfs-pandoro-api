@@ -31,6 +31,17 @@ export class NodeStatus {
 
       return new Response(JSON.stringify(sortedStatuses), { status: 200 });
     }
+	
+    // 新增的删除节点接口
+    if (pathname.startsWith('/node/') && request.method === 'DELETE') {
+      const nodeId = pathname.split('/').pop(); // 获取节点 ID
+      if (!nodeId) {
+        return new Response('Node ID not specified', { status: 400 });
+      }
+
+      await this.storage.delete(nodeId);
+      return new Response(`Node ${nodeId} deleted`, { status: 200 });
+    }
 
     return new Response('Not Found', { status: 404 });
   }
