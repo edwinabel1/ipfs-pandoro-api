@@ -8,7 +8,7 @@ export class NodeStatus {
   async fetch(request: Request): Promise<Response> {
     const { pathname } = new URL(request.url);
 
-    if (pathname === '/update' && request.method === 'POST') {
+    if (pathname === '/nodestatus/update' && request.method === 'POST') {
       const newStatus = await request.json();
       const nodeId = newStatus.nodeId; // 假设传入的 JSON 包含 nodeId
 
@@ -22,7 +22,7 @@ export class NodeStatus {
       return new Response('Node status updated', { status: 200 });
     }
 
-    if (pathname === '/status') {
+    if (pathname === '/nodestatus/status') {
       // 获取所有节点状态，按剩余磁盘空间排序
       const allStatuses = await this.storage.list();
       const sortedStatuses = Array.from(allStatuses.values())
@@ -33,7 +33,7 @@ export class NodeStatus {
     }
 	
     // 新增的删除节点接口
-    if (pathname.startsWith('/node/') && request.method === 'DELETE') {
+    if (pathname.startsWith('/nodestatus/node/') && request.method === 'DELETE') {
       const nodeId = pathname.split('/').pop(); // 获取节点 ID
       if (!nodeId) {
         return new Response('Node ID not specified', { status: 400 });

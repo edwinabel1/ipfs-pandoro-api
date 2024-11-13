@@ -23,7 +23,7 @@ nodeRouter.post('/update', async (c) => {
   const durableObject = c.env.NODE_STATUS.get(id);
 
   // 使用完整的 URL 构造 `fetch` 请求
-  const durableObjectUrl = new URL('/update', c.req.url).toString();
+  const durableObjectUrl = new URL('/nodestatus/update', c.req.url).toString();
 
   // 向 Durable Object 发起请求
   const response = await durableObject.fetch(durableObjectUrl, {
@@ -40,7 +40,7 @@ nodeRouter.get('/status', async (c) => {
   const durableObject = c.env.NODE_STATUS.get(id);
 
   // 使用完整的 URL 构造 `fetch` 请求
-  const durableObjectUrl = new URL('/status', c.req.url).toString();
+  const durableObjectUrl = new URL('/nodestatus/status', c.req.url).toString();
 
   // 直接向 Durable Object 请求所有节点的 /status
   const response = await durableObject.fetch(durableObjectUrl);
@@ -66,7 +66,7 @@ nodeRouter.delete('/:nodeId', async (c) => {
   const durableObject = c.env.NODE_STATUS.get(id);
 
   // 向 Durable Object 发起 `DELETE` 请求删除节点状态
-  const durableObjectUrl = new URL(`/node/${nodeId}`, c.req.url).toString();
+  const durableObjectUrl = new URL(`/nodestatus/node/${nodeId}`, c.req.url).toString();
   const response = await durableObject.fetch(durableObjectUrl, { method: 'DELETE' });
 
   if (response.status === 200) {

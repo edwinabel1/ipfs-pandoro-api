@@ -112,6 +112,10 @@ enabled = true
 # binding = "MY_INDEX"
 # index_name = "my-index"
 
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "ipfs-pandoro"
+
 [[durable_objects.bindings]]
 name = "NODE_STATUS"
 class_name = "NodeStatus"
