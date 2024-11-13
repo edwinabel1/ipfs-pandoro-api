@@ -4,9 +4,9 @@ export const nodeRouter = new Hono();
 
 nodeRouter.post('/update', async (c) => {
   // 从请求体中解析字段
-  const { nodeId, remainingDiskSpace, processingFiles } = await c.req.json();
+  const { nodeId, remainingDiskSpace } = await c.req.json();
 
-  if (!nodeId || remainingDiskSpace === undefined || processingFiles === undefined) {
+  if (!nodeId || remainingDiskSpace === undefined ) {
     return c.text('Invalid data', 400);
   }
 
@@ -14,7 +14,6 @@ nodeRouter.post('/update', async (c) => {
   const status = {
     nodeId,
     remainingDiskSpace,
-    processingFiles,
     timestamp: Date.now(),
   };
 
