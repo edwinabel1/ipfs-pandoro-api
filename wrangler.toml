@@ -116,7 +116,11 @@ enabled = true
 name = "NODE_STATUS"
 class_name = "NodeStatus"
 
+[[durable_objects.bindings]]
+name = "FILE_STATUS"
+class_name = "FileStatus"
+
 [[migrations]]
-tag = "v1" # Should be unique for each entry
-new_classes = ["NodeStatus"]
+tag = "v2" # Should be unique for each entry
+new_classes = ["FileStatus"]
 
