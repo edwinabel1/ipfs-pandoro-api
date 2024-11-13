@@ -11,7 +11,12 @@ fileRouter.post('/assign', async (c) => {
 
   const id = c.env.FILE_STATUS.idFromName('file-status');
   const durableObject = c.env.FILE_STATUS.get(id);
-  const response = await durableObject.fetch(`/assign?file_id=${fileId}&node_id=${nodeId}`);
+
+  // 拼接完整的 Durable Object 路径
+  const durableObjectUrl = new URL(`/assign?file_id=${fileId}&node_id=${nodeId}`, c.req.url).toString();
+  
+  // 发送请求
+  const response = await durableObject.fetch(durableObjectUrl, { method: 'POST' });
   return response;
 });
 
@@ -24,7 +29,11 @@ fileRouter.post('/complete', async (c) => {
 
   const id = c.env.FILE_STATUS.idFromName('file-status');
   const durableObject = c.env.FILE_STATUS.get(id);
-  const response = await durableObject.fetch(`/complete?file_id=${fileId}&node_id=${nodeId}`);
+
+  // 拼接完整的 Durable Object 路径
+  const durableObjectUrl = new URL(`/complete?file_id=${fileId}&node_id=${nodeId}`, c.req.url).toString();
+  
+  const response = await durableObject.fetch(durableObjectUrl, { method: 'POST' });
   return response;
 });
 
@@ -37,7 +46,11 @@ fileRouter.get('/status/:fileId', async (c) => {
 
   const id = c.env.FILE_STATUS.idFromName('file-status');
   const durableObject = c.env.FILE_STATUS.get(id);
-  const response = await durableObject.fetch(`/status/${fileId}`);
+
+  // 拼接完整的 Durable Object 路径
+  const durableObjectUrl = new URL(`/status/${fileId}`, c.req.url).toString();
+  
+  const response = await durableObject.fetch(durableObjectUrl);
   return response;
 });
 
@@ -50,7 +63,11 @@ fileRouter.post('/lock', async (c) => {
 
   const id = c.env.FILE_STATUS.idFromName('file-status');
   const durableObject = c.env.FILE_STATUS.get(id);
-  const response = await durableObject.fetch(`/lock?file_id=${fileId}`);
+
+  // 拼接完整的 Durable Object 路径
+  const durableObjectUrl = new URL(`/lock?file_id=${fileId}`, c.req.url).toString();
+
+  const response = await durableObject.fetch(durableObjectUrl, { method: 'POST' });
   return response;
 });
 
@@ -63,7 +80,11 @@ fileRouter.post('/unlock', async (c) => {
 
   const id = c.env.FILE_STATUS.idFromName('file-status');
   const durableObject = c.env.FILE_STATUS.get(id);
-  const response = await durableObject.fetch(`/unlock?file_id=${fileId}`);
+
+  // 拼接完整的 Durable Object 路径
+  const durableObjectUrl = new URL(`/unlock?file_id=${fileId}`, c.req.url).toString();
+
+  const response = await durableObject.fetch(durableObjectUrl, { method: 'POST' });
   return response;
 });
 
@@ -76,6 +97,10 @@ fileRouter.delete('/:fileId', async (c) => {
 
   const id = c.env.FILE_STATUS.idFromName('file-status');
   const durableObject = c.env.FILE_STATUS.get(id);
-  const response = await durableObject.fetch(`/delete?file_id=${fileId}`);
+
+  // 拼接完整的 Durable Object 路径
+  const durableObjectUrl = new URL(`/delete?file_id=${fileId}`, c.req.url).toString();
+
+  const response = await durableObject.fetch(durableObjectUrl, { method: 'DELETE' });
   return response;
 });
