@@ -36,10 +36,9 @@ export class FileStatus {
       return await this.assignNodeToFile(fileId, nodeId);
     } else if (
       pathname.startsWith("/filestatus/complete") &&
-      fileId &&
-      nodeId
+      fileId
     ) {
-      return await this.completeNodeTask(fileId, nodeId);
+      return await this.completeNodeTask(fileId);
     } else if (pathname.startsWith("/filestatus/status/")) {
       if (pathname === "/filestatus/status/all") {
         return await this.getAllFileStatuses();
@@ -77,19 +76,17 @@ export class FileStatus {
     return new Response("Node assigned", { status: 200 });
   }
 
-  async completeNodeTask(fileId: string, nodeId: string): Promise<Response> {
+  async completeNodeTask(fileId: string): Promise<Response> {
     const fileData = await this.storage.get(fileId);
     if (!fileData) {
       return new Response("File not found", { status: 404 });
     }
-    fileData.replicaCount = Math.max(0, fileData.replicaCount - 1);
-    if (fileData.replicaCount <= 0) {
-      await this.deleteFileStatus(fileId);
-      return new Response("File replicas completed and status deleted", {
-        status: 200,
-      });
+    fileData.completedReplicas = fileData.completedReplicas + 1;
+	await this.storage.put(fileId, fileData);
+    if (fileData.replicaCount <= fileData.completedReplicas) {
+      return new Response("File replicas completed", { status: 200 });
     } else {
-      await this.storage.put(fileId, fileData);
+
       return new Response("File replica count updated", { status: 200 });
     }
   }

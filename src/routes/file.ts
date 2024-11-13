@@ -22,16 +22,16 @@ fileRouter.post('/assign', async (c) => {
 
 // POST /file/complete - 完成文件处理
 fileRouter.post('/complete', async (c) => {
-  const { fileId, nodeId } = await c.req.json();
-  if (!fileId || !nodeId) {
-    return c.text('Missing fileId or nodeId', 400);
+  const { fileId } = await c.req.json();
+  if (!fileId) {
+    return c.text('Missing fileId', 400);
   }
 
   const id = c.env.FILE_STATUS.idFromName('file-status');
   const durableObject = c.env.FILE_STATUS.get(id);
 
   // 拼接完整的 Durable Object 路径
-  const durableObjectUrl = new URL(`/filestatus/complete?file_id=${fileId}&node_id=${nodeId}`, c.req.url).toString();
+  const durableObjectUrl = new URL(`/filestatus/complete?file_id=${fileId}`, c.req.url).toString();
   
   const response = await durableObject.fetch(durableObjectUrl, { method: 'POST' });
   return response;
