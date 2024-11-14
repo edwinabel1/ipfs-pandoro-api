@@ -26,7 +26,7 @@ export class FileStatus {
 
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
-    const pathname = url.pathname;
+    const pathname = decodeURIComponent(url.pathname);
     const fileId = decodeURIComponent(url.searchParams.get("file_id"));
     const nodeId = url.searchParams.get("node_id");
 
