@@ -48,6 +48,9 @@ export class FileStatus {
       return await this.lockFile(fileId);
     } else if (pathname.startsWith("/filestatus/unlock") && fileId) {
       return await this.unlockFile(fileId);
+    } else if (pathname.startsWith("/filestatus/delete-all")) {
+      // 调用新方法删除所有文件状态
+      return await this.deleteAllFileStatuses();
     } else if (pathname.startsWith("/filestatus/delete") && fileId) {
       return await this.deleteFileStatus(fileId);
     }
@@ -155,6 +158,20 @@ export class FileStatus {
     } catch (error) {
       console.error("Failed to retrieve all file statuses:", error);
       return new Response("Error retrieving file statuses", { status: 500 });
+    }
+  }
+  
+  // 新增的强制删除所有文件状态记录的方法
+  async deleteAllFileStatuses(): Promise<Response> {
+    try {
+      const listItems = await this.storage.list();
+      for (const [fileId] of listItems.entries()) {
+        await this.storage.delete(fileId);
+      }
+      return new Response("All file statuses deleted successfully.", { status: 200 });
+    } catch (error) {
+      console.error("Failed to delete all file statuses:", error);
+      return new Response("Error deleting all file statuses", { status: 500 });
     }
   }
 }
