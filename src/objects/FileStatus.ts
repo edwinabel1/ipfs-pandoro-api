@@ -9,16 +9,9 @@ export class FileStatus {
 
   async checkFileInR2AndGetReplicaCount(
     fileId: string
-  ): Promise<number | null> {
-    console.log("checkFileInR2AndGetReplicaCount");
-    console.log(fileId);
-	
-  // 解码 fileId
-  const decodedFileId = decodeURIComponent(fileId);
-  console.log("Decoded fileId:", decodedFileId);
-  
+  ): Promise<number | null> {  
     try {
-      const object = await this.bucket.head(decodedFileId);
+      const object = await this.bucket.head(fileId);
       if (!object) {
         console.log(`File ${fileId} does not exist in R2.`);
         return null;
@@ -34,7 +27,7 @@ export class FileStatus {
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
     const pathname = url.pathname;
-    const fileId = url.searchParams.get("file_id");
+    const fileId = decodeURIComponent(url.searchParams.get("file_id"));
     const nodeId = url.searchParams.get("node_id");
 
     if (pathname.startsWith("/filestatus/assign") && fileId && nodeId) {
