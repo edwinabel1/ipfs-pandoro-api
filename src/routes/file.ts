@@ -89,6 +89,18 @@ fileRouter.post('/unlock', async (c) => {
   return response;
 });
 
+// DELETE /file/delete-all - 删除所有文件状态
+fileRouter.delete('/delete-all', async (c) => {
+  const id = c.env.FILE_STATUS.idFromName('file-status');
+  const durableObject = c.env.FILE_STATUS.get(id);
+
+  // 拼接 Durable Object 路径，调用 deleteAllFileStatuses 方法
+  const durableObjectUrl = new URL('/filestatus/delete-all', c.req.url).toString();
+
+  const response = await durableObject.fetch(durableObjectUrl, { method: 'DELETE' });
+  return response;
+});
+
 // DELETE /file/:fileId - 删除文件
 fileRouter.delete('/:fileId', async (c) => {
   const fileId = c.req.param('fileId');
@@ -101,18 +113,6 @@ fileRouter.delete('/:fileId', async (c) => {
 
   // 拼接完整的 Durable Object 路径
   const durableObjectUrl = new URL(`/filestatus/delete?file_id=${fileId}`, c.req.url).toString();
-
-  const response = await durableObject.fetch(durableObjectUrl, { method: 'DELETE' });
-  return response;
-});
-
-// DELETE /file/delete-all - 删除所有文件状态
-fileRouter.delete('/delete-all', async (c) => {
-  const id = c.env.FILE_STATUS.idFromName('file-status');
-  const durableObject = c.env.FILE_STATUS.get(id);
-
-  // 拼接 Durable Object 路径，调用 deleteAllFileStatuses 方法
-  const durableObjectUrl = new URL('/filestatus/delete-all', c.req.url).toString();
 
   const response = await durableObject.fetch(durableObjectUrl, { method: 'DELETE' });
   return response;
