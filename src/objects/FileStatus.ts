@@ -12,8 +12,13 @@ export class FileStatus {
   ): Promise<number | null> {
     console.log("checkFileInR2AndGetReplicaCount");
     console.log(fileId);
+	
+  // 解码 fileId
+  const decodedFileId = decodeURIComponent(fileId);
+  console.log("Decoded fileId:", decodedFileId);
+  
     try {
-      const object = await this.bucket.head(fileId);
+      const object = await this.bucket.head(decodedFileId);
       if (!object) {
         console.log(`File ${fileId} does not exist in R2.`);
         return null;
